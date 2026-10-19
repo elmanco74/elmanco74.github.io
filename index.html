@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELMANCO74 ABI ARSENAL SHARE - Gestor de Armamentos</title>
+    <style>
+        :root {
+            --bg-dark: #0b0f17;
+            --panel-bg: #111823;
+            --card-bg: #17202e;
+            --accent-orange: #f39c12;
+            --border-color: #263345;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto 30px auto;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-title-box h1 {
+            font-size: 2rem;
+            color: var(--accent-orange);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title-box h1::before {
+            content: '●';
+            color: var(--accent-orange);
+            font-size: 1.5rem;
+        }
+
+        .header-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 5px;
+            margin-bottom: 12px;
+        }
+
+        .social-linktree {
+            color: #38bdf8;
+            font-size: 0.95rem;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .social-linktree:hover {
+            text-decoration: underline;
+        }
+
+        .social-icons-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .social-icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: transform 0.2s ease;
+        }
+
+        .social-icon-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .social-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .btn-yt { background-color: #FF0000; }
+        .btn-kick { background-color: #53FC18; color: #000; font-size: 1.3rem; }
+        .btn-tiktok { background-color: #000000; border: 1px solid #333; }
+        .btn-x { background-color: #2b3846; border: 1px solid #3d4f63; color: #ffffff; }
+        .btn-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .btn-fb { background-color: #1877F2; }
+        .btn-twitch { background-color: #9146FF; }
+
+        .how-it-works-box {
+            background-color: #090d14;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            max-width: 320px;
+        }
+
+        .how-it-works-box h3 {
+            color: var(--accent-orange);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .how-it-works-box ol {
+            padding-left: 18px;
+            line-height: 1.5;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-bar-container {
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            width: 100%;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 14px;
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-orange);
+        }
+
+        .weapons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .weapon-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .weapon-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-orange);
+        }
+
+        /* EFECTO CURSOR DE LUPA EN LA IMAGEN */
+        .weapon-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #090d14;
+            border-bottom: 1px solid var(--border-color);
+            cursor: zoom-in;
+            transition: opacity 0.2s ease;
+        }
+
+        .weapon-img:hover {
+            opacity: 0.9;
+        }
+
+        .weapon-card-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .weapon-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .weapon-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            flex-grow: 1;
+            line-height: 1.4;
+        }
+
+        .code-container {
+            display: flex;
+            align-items: center;
+            background-color: #090d14;
+            border: 1px dashed var(--border-color);
+            border-radius: 4px;
+            padding: 8px 10px;
+            justify-content: space-between;
+        }
+
+        .code-text {
+            font-family: monospace;
+            color: var(--accent-orange);
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 8px;
+        }
+
+        .copy-btn {
+            background-color: var(--accent-orange);
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: #d68910;
+        }
+
+        .copy-btn.copied {
+            background-color: #22c55e;
+            color: #fff;
+        }
+
+        .no-results {
+            text-align: center;
+            color: var(--text-muted);
+            grid-column: 1 / -1;
+            padding: 40px;
+        }
+
+        /* ESTILOS DEL VISOR ZOOM (MODAL) */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .image-modal.active {
+            display: flex;
+        }
+
+        .modal-content-wrapper {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            border: 2px solid var(--accent-orange);
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.3);
+            object-fit: contain;
+        }
+
+        .modal-caption {
+            margin-top: 15px;
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
+        }
+
+        .modal-close-btn:hover {
+            color: var(--accent-orange);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <div class="header-title-box">
+            <h1>ELMANCO74 ABI ARSENAL SHARE</h1>
+            <div class="header-subtitle">Gestor táctico de armamentos y armado de equipamiento para Arena Breakout: Infinite</div>
+            
+            <a href="https://linktr.ee/elmanco74" target="_blank" class="social-linktree">
+                👉 Búscame en mis redes sociales a través de este enlace: linktr.ee/elmanco74
+            </a>
+
+            <div class="social-icons-row">
+                <a href="https://linktr.ee/elmanco74" target="_blank" class="social-icon-btn btn-yt" title="YouTube">
+                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+                <a href="https://linktr.ee/elmanco74" target="_blank" class="social-icon-btn btn-kick" title="Kick">K</a>
+                <a href="https://linktr.ee/elmanco74" target="_blank" class="social-icon-btn btn-tiktok" title="TikTok">
+                    <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.31 1.56-1.28 2.55.02 1.01.54 1.98 1.37 2.55.83.56 1.91.73 2.87.43.96-.29 1.74-1.06 2.01-2.04.12-.51.15-1.04.14-1.57V.02z"/></svg>
+                </a>
+                <a href="https://linktr.ee/elmanco74" target="_blank" class="social-icon-btn btn-x" title="X (Twitter)">
+                    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="https://linktr.ee/elmanco74" target="_blank" class="social-icon-btn btn-ig" title="Instagram">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="https://linktr.ee/elmanco74" target="_blank" class="social-icon-btn btn-fb" title="Facebook">
+                    <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="https://linktr.ee/elmanco74" target="_blank" class="social-icon-btn btn-twitch" title="Twitch">
+                    <svg viewBox="0 0 24 24"><path d="M11.571 1.429L1.429 4.286v15.714h5.714V24l3.571-3.571h3.572L22.571 12.143V1.429h-11zm9.286 10l-2.857 2.857h-4.286l-2.5 2.5v-2.5H6.857V3.571h14l-.001 7.858zM17.571 6.071h-2.143v5h2.143v-5zm-5 0h-2.143v5h2.143v-5z"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="how-it-works-box">
+            <h3>💡 ¿CÓMO FUNCIONA?</h3>
+            <ol>
+                <li>Usá el buscador para encontrar tu arma.</li>
+                <li>Hacé clic en el botón <strong>"Copiar Código"</strong>.</li>
+                <li>Abrí <strong>Arena Breakout: Infinite</strong> → Entrá a <strong>Armería</strong> → Seleccioná <strong>Importar Build</strong> y pegá el código.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="search-bar-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Buscar por nombre, tipo de arma o descripción..." oninput="filtrarArmas()">
+        </div>
+
+        <div class="weapons-grid" id="weapons-grid"></div>
+    </div>
+
+    <!-- ESTRUCTURA DEL VISOR DE IMAGEN (ZOOM) -->
+    <div id="image-modal" class="image-modal" onclick="cerrarZoom(event)">
+        <div class="modal-content-wrapper">
+            <button class="modal-close-btn" onclick="cerrarZoomDirecto()">✕</button>
+            <img id="modal-img" class="modal-img" src="" alt="Vista ampliada">
+            <div id="modal-caption" class="modal-caption"></div>
+        </div>
+    </div>
+
+    <script>
+        const armasOficiales = [
+            {
+                id: '1',
+                nombre: 'M4A1 - Control Total',
+                codigo: 'ABI-M4A1-META-9988',
+                descripcion: 'Build equilibrada con bajísimo retroceso horizontal. Recomendada para munición A1.',
+                imagen: 'imagenes/m4a1.png'
+            },
+            {
+                id: '2',
+                nombre: 'FAL - Calibre 7.62',
+                codigo: 'ABI-FAL-BUDGET-4411',
+                descripcion: 'Alto poder de parada. Ideal para mapa Valle o enfrentamientos a media distancia.',
+                imagen: 'imagenes/fal.png'
+            },
+            {
+                id: '3',
+                nombre: 'Scar-L calibre 5.56',
+                codigo: 'fddsdfre4 ghtdf- g5e51',
+                descripcion: 'gdrfgdghdt gdgert5yrdfthfhhhrfhrt.',
+                imagen: 'imagenes/scar.png'
+            }
+
+        ];
+
+        function renderizarArmas(lista) {
+            const grid = document.getElementById('weapons-grid');
+            grid.innerHTML = '';
+
+            if (lista.length === 0) {
+                grid.innerHTML = '<div class="no-results">No se encontraron armas que coincidan con la búsqueda.</div>';
+                return;
+            }
+
+            lista.forEach((arma) => {
+                const card = document.createElement('div');
+                card.className = 'weapon-card';
+                card.innerHTML = `
+                    <img src="${arma.imagen}" alt="${arma.nombre}" class="weapon-img" title="Haz clic para ampliar la imagen" onclick="abrirZoom('${arma.imagen}', '${arma.nombre}')" onerror="this.src='https://via.placeholder.com/400x220/111823/f39c12?text=Imagen+en+imagenes/'">
+                    <div class="weapon-card-body">
+                        <div class="weapon-title">${arma.nombre}</div>
+                        <div class="weapon-desc">${arma.descripcion || 'Sin descripción adicional.'}</div>
+                        <div class="code-container">
+                            <span class="code-text" id="code-${arma.id}">${arma.codigo}</span>
+                            <button class="copy-btn" onclick="copiarCodigo('${arma.id}', this)">Copiar Código</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function copiarCodigo(id, boton) {
+            const codigoText = document.getElementById(`code-${id}`).innerText;
+            navigator.clipboard.writeText(codigoText).then(() => {
+                const originalText = boton.innerText;
+                boton.innerText = '¡Copiado! ✓';
+                boton.classList.add('copied');
+                setTimeout(() => {
+                    boton.innerText = originalText;
+                    boton.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function filtrarArmas() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtradas = armasOficiales.filter(a => 
+                a.nombre.toLowerCase().includes(query) || 
+                a.codigo.toLowerCase().includes(query) || 
+                (a.descripcion && a.descripcion.toLowerCase().includes(query))
+            );
+            renderizarArmas(filtradas);
+        }
+
+        /* FUNCIONES DE ZOOM DE IMAGEN */
+        function abrirZoom(src, titulo) {
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalCaption = document.getElementById('modal-caption');
+
+            modalImg.src = src;
+            modalCaption.innerText = titulo;
+            modal.classList.add('active');
+        }
+
+        function cerrarZoom(e) {
+            // Cierra si hace clic en el fondo negro fuera de la imagen
+            if (e.target.id === 'image-modal' || e.target.className === 'modal-content-wrapper') {
+                document.getElementById('image-modal').classList.remove('active');
+            }
+        }
+
+        function cerrarZoomDirecto() {
+            document.getElementById('image-modal').classList.remove('active');
+        }
+
+        // Permitir cerrar el zoom con la tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                cerrarZoomDirecto();
+            }
+        });
+
+        renderizarArmas(armasOficiales);
+    </script>
+</body>
+</html>
